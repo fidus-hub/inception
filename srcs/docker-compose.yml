@@ -13,15 +13,17 @@ services:
 		container_name: nginx
 		hostname: nginx
 		build: srcs/services/NGINX
-		ports:
-		-
+		ports: 
+		  - 443:443
 		restart: "always"
 		volumes:
 		-
 		networks:
-		- inception
+		  - inception
 
-	php:
+  wordpress:
+    depends_on:
+      - mariadb
 		container_name:
 		hostname:
 		build:
@@ -29,7 +31,7 @@ services:
 		volumes:
 		-
 		networks:
-		- inception
+		  - inception
 		  
 	mariadb:
 		container_name:
@@ -42,4 +44,4 @@ services:
 		-
 		-
 		networks:
-		- inception
+		  - inception
