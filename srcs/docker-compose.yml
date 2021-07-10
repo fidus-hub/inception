@@ -1,0 +1,45 @@
+version: "3"
+
+networks:
+	inception:
+
+volumes:
+	v_wordpress:
+
+	v_database:
+
+services:
+	nginx:
+		container_name: nginx
+		hostname: nginx
+		build: srcs/services/NGINX
+		ports:
+		-
+		restart: "always"
+		volumes:
+		-
+		networks:
+		- inception
+
+	php:
+		container_name:
+		hostname:
+		build:
+		restart: "always"
+		volumes:
+		-
+		networks:
+		- inception
+		  
+	mariadb:
+		container_name:
+		hostname:
+		build:
+		restart: "always"
+		ports:
+		-
+		volumes:
+		-
+		-
+		networks:
+		- inception
