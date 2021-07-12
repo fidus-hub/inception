@@ -9,17 +9,17 @@ volumes:
 	v_database:
 
 services:
-	nginx:
-		container_name: nginx
-		hostname: nginx
-		build: srcs/services/NGINX
-		ports: 
-		  - 443:443
-		restart: "always"
-		volumes:
-		-
-		networks:
-		  - inception
+  nginx:
+    image: nginx:inc
+    restart: always
+    ports:
+        - "443:443"
+    build:
+      context: srcs/services/NGINX
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    env_file: .env
 
   wordpress:
     depends_on:
