@@ -1,47 +1,59 @@
-version: "3"
-
-networks:
-	inception:
-
-volumes:
-	v_wordpress:
-
-	v_database:
+version: '3'
 
 services:
-  nginx:
-    image: nginx:inc
+  mariadb:
+    build : ./requirements/mariadb
+    container_name: mariadb
     restart: always
-    ports:
-        - "443:443"
-    build:
-      context: srcs/services/NGINX
-      dockerfile: Dockerfile
+    env_file:
+      - .env
     networks:
-      - inception
-    env_file: .env
+      - wordpress
+    ports:
+      - "3306:3306"
+    volumes:
+      - DB:/var/lib/mysql
+  nginx:
+    depends_on: 
+      - wordpress
+    build: ./requirements/nginx
+    image: nginx 
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - Wordpress:/var/www/html
+    networks:
+      - wordpress
 
   wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
     depends_on:
       - mariadb
-		container_name:
-		hostname:
-		build:
-		restart: "always"
-		volumes:
-		-
-		networks:
-		  - inception
-		  
-	mariadb:
-		container_name:
-		hostname:
-		build:
-		restart: "always"
-		ports:
-		-
-		volumes:
-		-
-		-
-		networks:
-		  - inception
+    volumes:
+      - Wordpress:/var/www/html
+    ports: 
+      - "9000"
+    networks:
+      - wordpress
+    env_file:
+      - .env
+
+volumes:
+  Wordpress:
+    driver_opts:
+      type: none
+      device: /home/ada/data/Wordpress
+      o: bind
+  DB:
+    driver_opts: 
+      type: none
+      device: /home/ada/data/DB
+      o: bind
+
+networks:
+  wordpress:
+    driver: bridge
+        
