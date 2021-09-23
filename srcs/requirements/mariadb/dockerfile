@@ -7,7 +7,7 @@ RUN apt install mariadb-server mariadb-client -y
 
 COPY tools/script.sh /script.sh
 COPY ./conf conf
-COPY tools/wp_db.sql /
+#COPY tools/wp_db.sql /
 
 RUN chmod +x script.sh
 CMD ["sh", "script.sh"]
